@@ -7,6 +7,13 @@
   (major1) == 4000 && (major2) <  2 || \
   (major1) == 4000 && (major2) == 2 && (minor) <= 10)
 
+/* package aeson-0.7.0.6 */
+#define VERSION_aeson "0.7.0.6"
+#define MIN_VERSION_aeson(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  7 || \
+  (major1) == 0 && (major2) == 7 && (minor) <= 0)
+
 /* package base-4.7.0.1 */
 #define VERSION_base "4.7.0.1"
 #define MIN_VERSION_base(major1,major2,minor) (\

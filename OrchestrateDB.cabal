@@ -58,7 +58,7 @@ library
 
   -- Other library packages from which modules are imported.
   build-depends:       base >=4.7 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
-                      ,lifted-base >= 0.2
+                      ,lifted-base >= 0.2, aeson
 
   -- Directories containing source files.
   hs-source-dirs: src
