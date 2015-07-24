@@ -48,7 +48,7 @@ cabal-version:       >=1.10
 
 library
   -- Modules exported by the library.
-  -- exposed-modules:
+  exposed-modules: Orchestrate
 
   -- Modules included in this library but not exported.
   -- other-modules:
@@ -57,7 +57,8 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.7 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8
+  build-depends:       base >=4.7 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
+                      ,lifted-base >= 0.2
 
   -- Directories containing source files.
   hs-source-dirs: src

@@ -14,10 +14,31 @@
   (major1) == 4 && (major2) <  7 || \
   (major1) == 4 && (major2) == 7 && (minor) <= 0)
 
+/* package bytestring-0.10.4.0 */
+#define VERSION_bytestring "0.10.4.0"
+#define MIN_VERSION_bytestring(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  10 || \
+  (major1) == 0 && (major2) == 10 && (minor) <= 4)
+
 /* package http-conduit-2.1.5 */
 #define VERSION_http_conduit "2.1.5"
 #define MIN_VERSION_http_conduit(major1,major2,minor) (\
   (major1) <  2 || \
   (major1) == 2 && (major2) <  1 || \
   (major1) == 2 && (major2) == 1 && (minor) <= 5)
+
+/* package http-types-0.8.6 */
+#define VERSION_http_types "0.8.6"
+#define MIN_VERSION_http_types(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  8 || \
+  (major1) == 0 && (major2) == 8 && (minor) <= 6)
+
+/* package lifted-base-0.2.3.6 */
+#define VERSION_lifted_base "0.2.3.6"
+#define MIN_VERSION_lifted_base(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  2 || \
+  (major1) == 0 && (major2) == 2 && (minor) <= 3)
 
