@@ -6,7 +6,8 @@ module Orchestrate.REST
       validateApplication,
       orchestrateCollectionPutWithoutKey,
       orchestrateCollectionDelete,
-      orchestrateCollectionGet
+      orchestrateCollectionGet,
+      orchestrateCollectionPut
     ) where
 
 import Network.HTTP.Conduit
@@ -53,6 +54,30 @@ orchestrateCollectionPutWithoutKey application collection object = do
       Just unsecuredRequest -> withManager $ \manager -> do
                   let request = unsecuredRequest {
                                           method = "POST",
+                                          secure = True,
+                                          requestHeaders = [("Content-Type", "application/json")],
+                                          requestBody = RequestBodyBS $ BSLazy.toStrict objAsJson }
+                  let reqHead = applyBasicAuth (B.pack $ apiKey application) "" request
+                  resOrException <- X.try (http reqHead manager)
+                  case resOrException of
+                    Right res -> if responseStatus res == status201
+                      then return True
+                      else return False
+                    Left (_::X.SomeException) -> return False
+
+orchestrateCollectionPut :: ToJSON obj => OrchestrateApplication -> OrchestrateCollection -> String -> obj -> IO Bool
+orchestrateCollectionPut application collection key object = do
+  let objAsJson = encode object
+  let api_key = apiKey application
+  if api_key == ""
+  then return False
+  else do
+    let url = httpsEndpoint application ++ "/" ++ collectionName collection ++ "/" ++ key
+    case parseUrl url of
+      Nothing -> return False
+      Just unsecuredRequest -> withManager $ \manager -> do
+                  let request = unsecuredRequest {
+                                          method = "PUT",
                                           secure = True,
                                           requestHeaders = [("Content-Type", "application/json")],
                                           requestBody = RequestBodyBS $ BSLazy.toStrict objAsJson }

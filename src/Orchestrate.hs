@@ -1,6 +1,12 @@
 module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
                    Orchestrate.Types.OrchestrateApplication(..),
-                   Orchestrate.REST.validateApplication) where
+                   Orchestrate.REST.validateApplication,
+                   Orchestrate.REST.orchestrateCollectionGet,
+                   Orchestrate.REST.orchestrateCollectionPut,
+                   Orchestrate.REST.orchestrateCollectionPutWithoutKey,
+                   Orchestrate.REST.orchestrateCollectionDelete,
+                   createStdCollection,
+                   createStdApplication) where
 
 import qualified Orchestrate.Types
 import qualified Orchestrate.REST
@@ -12,3 +18,8 @@ createStdApplication name api_key =
     Orchestrate.Types.apiKey = api_key,
     Orchestrate.Types.httpsEndpoint = "https://api.orchestrate.io/v0"
   }
+
+createStdCollection :: String -> Orchestrate.Types.OrchestrateCollection
+createStdCollection name = Orchestrate.Types.OrchestrateCollection {
+  Orchestrate.Types.collectionName = name
+}
