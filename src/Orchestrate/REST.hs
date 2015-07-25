@@ -7,7 +7,8 @@ module Orchestrate.REST
       orchestrateCollectionPutWithoutKey,
       orchestrateCollectionDelete,
       orchestrateCollectionGet,
-      orchestrateCollectionPut
+      orchestrateCollectionPut,
+      orchestrateCollectionDeleteKey
     ) where
 
 import Network.HTTP.Conduit
@@ -112,6 +113,27 @@ orchestrateCollectionGet application collection key = do
                       return jsonObject
                     else return  Nothing
                   Left (_::X.SomeException) -> return  Nothing
+
+orchestrateCollectionDeleteKey :: OrchestrateApplication -> OrchestrateCollection -> String -> IO Bool
+orchestrateCollectionDeleteKey application collection key = do
+  let api_key = apiKey application
+  if api_key == ""
+  then return False
+  else do
+    let url = httpsEndpoint application ++ "/" ++ collectionName collection ++ "/" ++ key ++ "?force=true"
+    case parseUrl url of
+      Nothing -> return False
+      Just unsecuredRequest -> withManager $ \manager -> do
+                  let request = unsecuredRequest {
+                                          method = "DELETE",
+                                          secure = True }
+                  let reqHead = applyBasicAuth (B.pack $ apiKey application) "" request
+                  resOrException <- X.try (http reqHead manager)
+                  case resOrException of
+                    Right res -> if responseStatus res == status204
+                      then return True
+                      else return False
+                    Left (_::X.SomeException) -> return False
 
 orchestrateCollectionDelete :: OrchestrateApplication -> OrchestrateCollection -> IO Bool
 orchestrateCollectionDelete application collection = do
