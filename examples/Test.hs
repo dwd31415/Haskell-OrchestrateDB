@@ -38,10 +38,16 @@ main = do
   res2 <- DB.orchestrateCollectionPut dbApplication dbCollection "hello-world" testRecord1
   unless res2 exitFailure
   reachTest 2
-  res3 <- DB.orchestrateCollectionPutWithoutKey dbApplication dbCollection testRecord2
+  res3 <- DB.orchestrateCollectionPut dbApplication dbCollection "irrelevant" testRecord1
   unless res3 exitFailure
   reachTest 3
+  res4 <- DB.orchestrateCollectionPutWithoutKey dbApplication dbCollection testRecord2
+  unless res4 exitFailure
+  reachTest 4
   shouldBeTestRecord1Maybe <- DB.orchestrateCollectionGet dbApplication dbCollection "hello-world" :: IO (Maybe TestRecord)
   let shouldBeTestRecord1 = fromJust shouldBeTestRecord1Maybe
   unless (shouldBeTestRecord1 == testRecord1) exitFailure
-  reachTest 4
+  reachTest 5
+  res5 <- DB.orchestrateCollectionDeleteKey dbApplication dbCollection "irrelevant"
+  unless res5 exitFailure
+  reachTest 6

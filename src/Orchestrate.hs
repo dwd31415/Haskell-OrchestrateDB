@@ -5,6 +5,7 @@ module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
                    Orchestrate.REST.orchestrateCollectionPut,
                    Orchestrate.REST.orchestrateCollectionPutWithoutKey,
                    Orchestrate.REST.orchestrateCollectionDelete,
+                   Orchestrate.REST.orchestrateCollectionDeleteKey,
                    createStdCollection,
                    createStdApplication) where
 
