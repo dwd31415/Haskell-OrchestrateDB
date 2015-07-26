@@ -11,6 +11,7 @@ import Data.Aeson.Types
 import GHC.Generics
 import Control.Monad
 import Data.Maybe
+import System.Random
 import qualified Orchestrate as DB
 
 data TestRecord = TestRecord
@@ -28,6 +29,7 @@ reachTest number = do
 main :: IO ()
 main = do
   configTxt <- readFile "examples/config.txt"
+  randomNumber <- randomIO :: IO Integer
   let config = read configTxt :: (String,String)
   let dbApplication = DB.createStdApplication "TestApp" (fst config)
   let dbCollection = DB.createStdCollection (snd config)
@@ -36,7 +38,8 @@ main = do
   res1 <- DB.validateApplication dbApplication
   unless res1 exitFailure
   reachTest 1
-  res2 <- DB.orchestrateCollectionPut dbApplication dbCollection "hello-world" testRecord1
+  let testKey = "hello-world" ++ show randomNumber
+  res2 <- DB.orchestrateCollectionPut dbApplication dbCollection testKey testRecord1
   unless res2 exitFailure
   reachTest 2
   res3 <- DB.orchestrateCollectionPut dbApplication dbCollection "irrelevant" testRecord1
@@ -45,7 +48,7 @@ main = do
   res4 <- DB.orchestrateCollectionPutWithoutKey dbApplication dbCollection testRecord2
   unless res4 exitFailure
   reachTest 4
-  shouldBeTestRecord1Maybe <- DB.orchestrateCollectionGet dbApplication dbCollection "hello-world" :: IO (Maybe TestRecord)
+  shouldBeTestRecord1Maybe <- DB.orchestrateCollectionGet dbApplication dbCollection testKey :: IO (Maybe TestRecord)
   let shouldBeTestRecord1 = fromJust shouldBeTestRecord1Maybe
   unless (shouldBeTestRecord1 == testRecord1) exitFailure
   reachTest 5
