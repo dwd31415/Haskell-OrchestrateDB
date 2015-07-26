@@ -8,7 +8,10 @@ module Orchestrate.REST
       orchestrateCollectionDelete,
       orchestrateCollectionGet,
       orchestrateCollectionPut,
-      orchestrateCollectionDeleteKey
+      orchestrateCollectionDeleteKey,
+      orchestrateCollectionSearch,
+      orchestrateCollectionSearchWithOffset,
+      parseQueryResponseBody
     ) where
 
 import Network.HTTP.Conduit
@@ -19,7 +22,9 @@ import qualified Data.ByteString.Char8 as B
 import qualified Control.Exception.Lifted as X
 
 import Data.Aeson
+import Data.Aeson.Types
 import Orchestrate.Types
+import Data.Maybe
 
 validateApplication :: OrchestrateApplication -> IO Bool
 validateApplication application = do
@@ -41,6 +46,8 @@ validateApplication application = do
                         then return True
                         else return False
                       Left (_::X.SomeException) -> return False
+
+-- KEY/VALUE
 
 orchestrateCollectionPutWithoutKey :: ToJSON obj => OrchestrateApplication -> OrchestrateCollection -> obj -> IO Bool
 orchestrateCollectionPutWithoutKey application collection object = do
@@ -155,3 +162,43 @@ orchestrateCollectionDelete application collection = do
                       then return True
                       else return False
                     Left (_::X.SomeException) -> return False
+
+-- SEARCH
+
+orchestrateCollectionSearch :: {-FromJSON res =>-} OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe([Object],Bool))
+orchestrateCollectionSearch application collection query = orchestrateCollectionSearchWithOffset application collection query 0 10
+
+
+orchestrateCollectionSearchWithOffset :: {-FromJSON res =>-} OrchestrateApplication -> OrchestrateCollection -> String -> Integer -> Integer -> IO (Maybe([Object],Bool))
+orchestrateCollectionSearchWithOffset application collection query offset limit = do
+  let api_key = apiKey application
+  if api_key == ""
+    then return Nothing
+    else do
+      let url = httpsEndpoint application ++ "/" ++ collectionName collection ++ "?query=" ++ query ++ "&limit=" ++ show limit ++ "&offset=" ++ show offset
+      case parseUrl url of
+        Nothing -> return Nothing
+        Just unsecuredRequest -> withManager $ \manager -> do
+                let request = unsecuredRequest {
+                                        method = "GET",
+                                        secure = True }
+                let reqHead = applyBasicAuth (B.pack $ apiKey application) "" request
+                resOrException <- X.try (httpLbs reqHead manager)
+                case resOrException of
+                  Right res -> if responseStatus res == ok200
+                    then do
+                      let resBody = responseBody res
+                      let (results,count) = fromMaybe ([],0) (parseQueryResponseBody resBody)
+                      return $ Just (results,count > (fromIntegral (length results) + offset))
+
+                    else return  Nothing
+                  Left (_::X.SomeException) -> return  Nothing
+
+parseQueryResponseBody :: BSLazy.ByteString -> Maybe ([Object],Integer)
+parseQueryResponseBody resBodyRaw = do
+  result <- decode resBodyRaw
+  (count,results) <- flip parseMaybe result $ \obj -> do
+                         count <- obj .: "total_count" :: Parser Integer
+                         results <- obj .: "results" :: Parser [OrchestrateQueryResult]
+                         return (count,results)
+  return (resultValuesAsList results,count)

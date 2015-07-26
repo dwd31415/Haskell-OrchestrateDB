@@ -7,6 +7,7 @@ module Main where
 
 import System.Exit (exitFailure)
 import Data.Aeson
+import Data.Aeson.Types
 import GHC.Generics
 import Control.Monad
 import Data.Maybe
@@ -31,7 +32,7 @@ main = do
   let dbApplication = DB.createStdApplication "TestApp" (fst config)
   let dbCollection = DB.createStdCollection (snd config)
   let testRecord1 = TestRecord {string = "You may delay, but time will not!",number = 903}
-  let testRecord2 = TestRecord {string = "You may delay, but time will not!",number = 913}
+  let testRecord2 = TestRecord {string = "Two things are infinite: the universe and human stupidity; and I am not sure about the universe.",number = 913}
   res1 <- DB.validateApplication dbApplication
   unless res1 exitFailure
   reachTest 1
@@ -51,3 +52,16 @@ main = do
   res5 <- DB.orchestrateCollectionDeleteKey dbApplication dbCollection "irrelevant"
   unless res5 exitFailure
   reachTest 6
+  res6Maybe <- DB.orchestrateCollectionSearch dbApplication dbCollection "You may delay,"
+  let (res6,hasNextPage) = fromJust res6Maybe
+  unless (checkIfResSixIsCorrect res6) exitFailure
+  reachTest 7
+
+checkIfResSixIsCorrect :: [Object] -> Bool
+checkIfResSixIsCorrect (first:rest) = do
+  let num = flip parseMaybe first $ \obj -> obj .: "number" :: Parser Int
+  isJust num &&
+    (if fromJust num == 903 then checkIfResSixIsCorrect rest else
+       False)
+
+checkIfResSixIsCorrect [] = True

@@ -6,6 +6,8 @@ module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
                    Orchestrate.REST.orchestrateCollectionPutWithoutKey,
                    Orchestrate.REST.orchestrateCollectionDelete,
                    Orchestrate.REST.orchestrateCollectionDeleteKey,
+                   Orchestrate.REST.orchestrateCollectionSearch,
+                   Orchestrate.REST.orchestrateCollectionSearchWithOffset,
                    createStdCollection,
                    createStdApplication) where
 
