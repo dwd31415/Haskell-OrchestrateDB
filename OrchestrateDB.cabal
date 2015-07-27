@@ -78,5 +78,5 @@ Test-Suite tests-example1
   main-is: Test.hs
   hs-source-dirs: src,examples
   default-language: Haskell2010
-  build-depends:  base >=4.7 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
+  build-depends:  base >=4.4 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
                      ,lifted-base >= 0.2, aeson, random
