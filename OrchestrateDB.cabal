@@ -10,10 +10,10 @@ name:                OrchestrateDB
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             0.1.0.0
+version:             1.0.0.0
 
 -- A short (one-line) description of the package.
-synopsis:            An API client for the Orchestrate DB based on the curl api.
+synopsis:             Unofficial Haskell Client Library for the Orchestrate.io API
 
 -- A longer description of the package.
 -- description:
@@ -65,13 +65,6 @@ library
 
   -- Base language which the package is written in.
   default-language:    Haskell2010
-
-executable Example1
-  main-is: Test.hs
-  hs-source-dirs: src,examples
-  default-language: Haskell2010
-  build-depends:  base >=4.7 && <4.8, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
-                     ,lifted-base >= 0.2, aeson, random
 
 Test-Suite tests-example1
   type:       exitcode-stdio-1.0

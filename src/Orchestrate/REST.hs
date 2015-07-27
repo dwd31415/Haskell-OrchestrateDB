@@ -1,6 +1,34 @@
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+{-|
+Module      : Orchestrate.REST
+Description : All functions which interact with the Orchestrate.io REST API.
+Copyright   : (c) Adrian Dawid 2015
+License     : BSD3
+Maintainer  : adriandwd@gmail.com
+Stability   : stable
+
+This module conatins all the functins which interact with the Orchestrate.io REST API.
+Right now these actions are supported:
+
+  *  	Validate API Keys
+
+  *   List Key/Values
+
+  *   Create Key/Value
+
+  *   Create Key/Value with server-generated key
+
+  *   Update Key/Value
+
+  *   Retrieve Value for Key
+
+  *  	Delete Collection(s)
+
+  *   Query Collection
+
+-}
 module Orchestrate.REST
     (
       validateApplication,
@@ -27,6 +55,9 @@ import           Data.Maybe
 import           Orchestrate.Types
 
 validateApplication :: OrchestrateApplication -> IO Bool
+-- ^The 'validateApplication' function validates your API key,
+-- by making an authenticated HEAD request to the endpoint specified in the 'OrchestrateApplication' record.
+-- The function returns False when the key is invalid or the connection could not be established.
 validateApplication application = do
   let api_key = apiKey application
   if api_key == ""
@@ -48,6 +79,18 @@ validateApplication application = do
                       Left (_::X.SomeException) -> return False
 
 orchestrateCollectionList :: OrchestrateApplication -> OrchestrateCollection -> Integer -> IO (Maybe [Object])
+-- ^ The 'orchestrateCollectionList' function lists the contents of the specified collection, by making GET request to the \/$collection?limit=$limit endpoint.
+--   For more information check out the Orchestrate.io API docs: <https://orchestrate.io/docs/apiref#keyvalue-list>.
+--   If connecting to the api fails, or the api key stored in the application record is invlaid, 'Nothing' is returned.
+--   Otherwise an array of the type 'Object'(see the documentation of 'Data.Aeson' for more information) is returned, it
+--   contains the values from the HTTP response(see  <https://orchestrate.io/docs/apiref#keyvalue-list> for an example of how the response looks like in JSON).
+--
+--   = Example:
+--   @
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      dbContents <- DB.orchestrateCollectionList dbApplication dbCollection 10
+--   @
 orchestrateCollectionList application collection limit = do
   let api_key = apiKey application
   if api_key == ""
@@ -75,6 +118,26 @@ orchestrateCollectionList application collection limit = do
 -- KEY/VALUE
 
 orchestrateCollectionPutWithoutKey :: ToJSON obj => OrchestrateApplication -> OrchestrateCollection -> obj -> IO Bool
+-- ^ The 'orchestrateCollectionPutWithoutKey' function stores a Haskell value(with a 'ToJSON' instance) in an Orchestrate.io database.
+--   It does so by making a POST request to the \/$collection endpoint(Offical API docs:<https://orchestrate.io/docs/apiref#keyvalue-post>).
+--   This function does not need a user specified key, because it ueses a server-generated key, if you want to know the key
+--   use 'orchestrateCollectionPut' instead of this function.
+--
+--   = Example:
+--   @
+--      data TestRecord = TestRecord
+--        { string :: String
+--         , number :: Int
+--        } deriving (Show,Read,Generic,Eq)
+--
+--      instance FromJSON TestRecord
+--      instance ToJSON TestRecord
+--
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      let testRecord = TestRecord {string = "You may delay, but time will not!",number = 903}
+--      _ <- DB.orchestrateCollectionPutWithoutKey dbApplication dbCollection testRecord
+--   @
 orchestrateCollectionPutWithoutKey application collection object = do
   let objAsJson = encode object
   let api_key = apiKey application
@@ -99,6 +162,25 @@ orchestrateCollectionPutWithoutKey application collection object = do
                     Left (_::X.SomeException) -> return False
 
 orchestrateCollectionPut :: ToJSON obj => OrchestrateApplication -> OrchestrateCollection -> String -> obj -> IO Bool
+-- ^ The 'orchestrateCollectionPut' function stores a Haskell value(with a 'ToJSON' instance) in an Orchestrate.io database.
+--   It does so by making a PUT request to the \/$collection\/$key endpoint(Offical API docs:<https://orchestrate.io/docs/apiref#keyvalue-put>).
+--   In order to upload a Haskell Value to the database, it must have an instance of 'ToJSON' because this
+--   client uses 'Data.Aeson' to convert those Haskel Values to JSON, which is required by Orchestrate.io.
+--   = Example:
+--   @
+--      data TestRecord = TestRecord
+--        { string :: String
+--         , number :: Int
+--        } deriving (Show,Read,Generic,Eq)
+--
+--      instance FromJSON TestRecord
+--      instance ToJSON TestRecord
+--
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      let testRecord = TestRecord {string = "You may delay, but time will not!",number = 903}
+--      _ <- DB.orchestrateCollectionPutWithoutKey dbApplication dbCollection "KEY" testRecord
+--   @
 orchestrateCollectionPut application collection key object = do
   let objAsJson = encode object
   let api_key = apiKey application
@@ -123,6 +205,24 @@ orchestrateCollectionPut application collection key object = do
                     Left (_::X.SomeException) -> return False
 
 orchestrateCollectionGet :: FromJSON res => OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe res)
+-- ^ The 'orchestrateCollectionGet' function request a value from an Orchestrate.io database, and tries to convert it to the specified Haskell type,
+--  if either gettings the value from the database or converting it to the Haskell type fails 'Nothing' is returned.
+--  The value is requested by making a GET request to the \/$collection\/$key endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#keyvalue-get>)
+--   = Example:
+--   @
+--      data TestRecord = TestRecord
+--        { string :: String
+--         , number :: Int
+--        } deriving (Show,Read,Generic,Eq)
+--
+--      instance FromJSON TestRecord
+--      instance ToJSON TestRecord
+--
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      let testRecord = TestRecord {string = "You may delay, but time will not!",number = 903}
+--      dbValue <- <- DB.orchestrateCollectionGet dbApplication dbCollection "KEY" :: IO (Maybe TestRecord)
+--   @
 orchestrateCollectionGet application collection key = do
   let api_key = apiKey application
   if api_key == ""
