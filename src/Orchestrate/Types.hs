@@ -3,6 +3,16 @@
 {-# LANGUAGE RankNTypes        #-}
 {-# LANGUAGE TypeFamilies      #-}
 
+{-|
+Module      : Orchestrate.Types
+Description : Haskell types for various JSON patterns.
+Copyright   : (c) Adrian Dawid 2015
+License     : BSD3
+Maintainer  : adriandwd@gmail.com
+Stability   : stable
+
+This module conatins Haskell types which represent all necessary JSON patterns used by the Orchestrate.io API.
+-}
 module Orchestrate.Types
     ( OrchestrateApplication(..),
       OrchestrateCollection(..),
