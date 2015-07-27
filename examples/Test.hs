@@ -59,6 +59,10 @@ main = do
   let (res6,hasNextPage) = fromJust res6Maybe
   unless (checkIfResSixIsCorrect res6) exitFailure
   reachTest 7
+  res7Maybe <- DB.orchestrateCollectionList dbApplication dbCollection 100
+  let res7 = fromJust res7Maybe
+  unless (res7 /= []) exitFailure
+  reachTest 8
 
 checkIfResSixIsCorrect :: [Object] -> Bool
 checkIfResSixIsCorrect (first:rest) = do

@@ -8,6 +8,7 @@ module Orchestrate.Types
       OrchestrateCollection(..),
       OrchestrateQueryResult(..),
       OrchestratePath (..),
+      OrchestrateListResult (..),
       resultValuesAsList) where
 
 import Data.Aeson
@@ -31,12 +32,15 @@ data OrchestrateCollection = OrchestrateCollection {
     collectionName :: String
 }
 
+class OrchestrateIntermediateResult a where
+  resultValuesAsList :: [a] -> [Object]
+
 data OrchestratePath = OrchestratePath {
-  collection :: String,
-  kind :: String,
-  key :: String,
-  ref :: String,
-  reftimePath :: Integer
+  orchestratePathCollection :: String,
+  orchestratePathKind :: String,
+  orchestratePathKey :: String,
+  orchestratePathRef :: String,
+  orchestratePathReftime :: Integer
 }  deriving (Show,Read,Generic)
 
 instance FromJSON OrchestratePath where
@@ -51,10 +55,10 @@ instance FromJSON OrchestratePath where
 instance ToJSON   OrchestratePath
 
 data OrchestrateQueryResult = OrchestrateQueryResult {
-  path :: OrchestratePath,
-  value :: Object,
-  score :: Double,
-  reftimeQueryResult :: Integer
+  orchestrateQueryResultPath :: OrchestratePath,
+  orchestrateQueryResultValue :: Object,
+  orchestrateQueryResultScore :: Double,
+  orchestrateQueryResultReftimeQueryResult :: Integer
 }  deriving (Show,Generic)
 
 instance FromJSON OrchestrateQueryResult where
@@ -66,6 +70,23 @@ instance FromJSON OrchestrateQueryResult where
     -- A non-Object value is of the wrong type, so fail.
     parseJSON _          = mzero
 instance ToJSON   OrchestrateQueryResult
+instance OrchestrateIntermediateResult OrchestrateQueryResult where
+  resultValuesAsList = map orchestrateQueryResultValue
 
-resultValuesAsList :: [OrchestrateQueryResult] -> [Object]
-resultValuesAsList = map value
+
+data OrchestrateListResult = OrchestrateListResult {
+  orchestrateListResultPath :: OrchestratePath,
+  orchestrateListResultValue :: Object,
+  orchestrateListResultReftimeQueryResult :: Integer
+}  deriving (Show,Generic)
+
+instance FromJSON OrchestrateListResult where
+    parseJSON (Object v) = OrchestrateListResult <$>
+                           v .: "path"  <*>
+                           v .: "value" <*>
+                           v .: "reftime"
+    -- A non-Object value is of the wrong type, so fail.
+    parseJSON _          = mzero
+instance ToJSON   OrchestrateListResult
+instance OrchestrateIntermediateResult OrchestrateListResult where
+  resultValuesAsList = map orchestrateListResultValue

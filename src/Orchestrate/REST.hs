@@ -11,7 +11,7 @@ module Orchestrate.REST
       orchestrateCollectionDeleteKey,
       orchestrateCollectionSearch,
       orchestrateCollectionSearchWithOffset,
-      parseQueryResponseBody
+      orchestrateCollectionList
     ) where
 
 import Network.HTTP.Conduit
@@ -46,6 +46,31 @@ validateApplication application = do
                         then return True
                         else return False
                       Left (_::X.SomeException) -> return False
+
+orchestrateCollectionList :: OrchestrateApplication -> OrchestrateCollection -> Integer -> IO (Maybe [Object])
+orchestrateCollectionList application collection limit = do
+  let api_key = apiKey application
+  if api_key == ""
+    then return Nothing
+    else do
+      let url = httpsEndpoint application ++ "/" ++ collectionName collection ++ "?limit=" ++ show limit
+      case parseUrl url of
+        Nothing -> return Nothing
+        Just unsecuredRequest -> withManager $ \manager -> do
+                let request = unsecuredRequest {
+                                        method = "GET",
+                                        secure = True }
+                let reqHead = applyBasicAuth (B.pack $ apiKey application) "" request
+                resOrException <- X.try (httpLbs reqHead manager)
+                case resOrException of
+                  Right res -> if responseStatus res == ok200
+                    then do
+                      let resBody = responseBody res
+                      let results = fromMaybe [] (parseListResponseBody resBody)
+                      return $ Just results
+
+                    else return  Nothing
+                  Left (_::X.SomeException) -> return  Nothing
 
 -- KEY/VALUE
 
@@ -165,11 +190,11 @@ orchestrateCollectionDelete application collection = do
 
 -- SEARCH
 
-orchestrateCollectionSearch :: {-FromJSON res =>-} OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe([Object],Bool))
+orchestrateCollectionSearch :: OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe([Object],Bool))
 orchestrateCollectionSearch application collection query = orchestrateCollectionSearchWithOffset application collection query 0 10
 
 
-orchestrateCollectionSearchWithOffset :: {-FromJSON res =>-} OrchestrateApplication -> OrchestrateCollection -> String -> Integer -> Integer -> IO (Maybe([Object],Bool))
+orchestrateCollectionSearchWithOffset :: OrchestrateApplication -> OrchestrateCollection -> String -> Integer -> Integer -> IO (Maybe([Object],Bool))
 orchestrateCollectionSearchWithOffset application collection query offset limit = do
   let api_key = apiKey application
   if api_key == ""
@@ -193,6 +218,15 @@ orchestrateCollectionSearchWithOffset application collection query offset limit 
 
                     else return  Nothing
                   Left (_::X.SomeException) -> return  Nothing
+
+
+-- HELPERS
+
+parseListResponseBody :: BSLazy.ByteString -> Maybe [Object]
+parseListResponseBody resBodyRaw = do
+  result <- decode resBodyRaw
+  results <- flip parseMaybe result $ \obj -> obj .: "results" :: Parser [OrchestrateListResult]
+  return $ resultValuesAsList results
 
 parseQueryResponseBody :: BSLazy.ByteString -> Maybe ([Object],Integer)
 parseQueryResponseBody resBodyRaw = do
