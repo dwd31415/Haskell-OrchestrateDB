@@ -12,8 +12,8 @@ module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
                    createStdCollection,
                    createStdApplication) where
 
-import qualified Orchestrate.Types
 import qualified Orchestrate.REST
+import qualified Orchestrate.Types
 
 createStdApplication :: String -> String -> Orchestrate.Types.OrchestrateApplication
 createStdApplication name api_key =

@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Orchestrate.REST
@@ -14,17 +14,17 @@ module Orchestrate.REST
       orchestrateCollectionList
     ) where
 
-import Network.HTTP.Conduit
-import Network.HTTP.Types.Status
+import           Network.HTTP.Conduit
+import           Network.HTTP.Types.Status
 
-import qualified Data.ByteString.Lazy as BSLazy
-import qualified Data.ByteString.Char8 as B
-import qualified Control.Exception.Lifted as X
+import qualified Control.Exception.Lifted  as X
+import qualified Data.ByteString.Char8     as B
+import qualified Data.ByteString.Lazy      as BSLazy
 
-import Data.Aeson
-import Data.Aeson.Types
-import Orchestrate.Types
-import Data.Maybe
+import           Data.Aeson
+import           Data.Aeson.Types
+import           Data.Maybe
+import           Orchestrate.Types
 
 validateApplication :: OrchestrateApplication -> IO Bool
 validateApplication application = do

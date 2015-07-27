@@ -1,7 +1,7 @@
-{-# LANGUAGE OverloadedStrings      #-}
-{-# LANGUAGE RankNTypes             #-}
-{-# LANGUAGE DeriveGeneric          #-}
-{-# LANGUAGE TypeFamilies           #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RankNTypes        #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module Orchestrate.Types
     ( OrchestrateApplication(..),
@@ -11,18 +11,18 @@ module Orchestrate.Types
       OrchestrateListResult (..),
       resultValuesAsList) where
 
-import Data.Aeson
-import GHC.Generics
-import Control.Applicative        ((<$>), (<*>))
-import Control.Monad
+import           Control.Applicative ((<$>), (<*>))
+import           Control.Monad
+import           Data.Aeson
+import           GHC.Generics
 
 {-|
 A data type, that represents an Orchestrate application. It stores an api key (generated online), and a https-endpoint..
 -}
 data OrchestrateApplication = OrchestrateApplication {
     applicationName :: String,
-    apiKey :: String,
-    httpsEndpoint :: String
+    apiKey          :: String,
+    httpsEndpoint   :: String
 }
 
 {-|
@@ -37,10 +37,10 @@ class OrchestrateIntermediateResult a where
 
 data OrchestratePath = OrchestratePath {
   orchestratePathCollection :: String,
-  orchestratePathKind :: String,
-  orchestratePathKey :: String,
-  orchestratePathRef :: String,
-  orchestratePathReftime :: Integer
+  orchestratePathKind       :: String,
+  orchestratePathKey        :: String,
+  orchestratePathRef        :: String,
+  orchestratePathReftime    :: Integer
 }  deriving (Show,Read,Generic)
 
 instance FromJSON OrchestratePath where
@@ -55,9 +55,9 @@ instance FromJSON OrchestratePath where
 instance ToJSON   OrchestratePath
 
 data OrchestrateQueryResult = OrchestrateQueryResult {
-  orchestrateQueryResultPath :: OrchestratePath,
-  orchestrateQueryResultValue :: Object,
-  orchestrateQueryResultScore :: Double,
+  orchestrateQueryResultPath               :: OrchestratePath,
+  orchestrateQueryResultValue              :: Object,
+  orchestrateQueryResultScore              :: Double,
   orchestrateQueryResultReftimeQueryResult :: Integer
 }  deriving (Show,Generic)
 
@@ -75,8 +75,8 @@ instance OrchestrateIntermediateResult OrchestrateQueryResult where
 
 
 data OrchestrateListResult = OrchestrateListResult {
-  orchestrateListResultPath :: OrchestratePath,
-  orchestrateListResultValue :: Object,
+  orchestrateListResultPath               :: OrchestratePath,
+  orchestrateListResultValue              :: Object,
   orchestrateListResultReftimeQueryResult :: Integer
 }  deriving (Show,Generic)
 

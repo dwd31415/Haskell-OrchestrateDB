@@ -1,22 +1,22 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes        #-}
-{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE TypeFamilies      #-}
 
 module Main where
 
-import System.Exit (exitFailure)
-import Data.Aeson
-import Data.Aeson.Types
-import GHC.Generics
-import Control.Monad
-import Data.Maybe
-import System.Random
-import qualified Orchestrate as DB
+import           Control.Monad
+import           Data.Aeson
+import           Data.Aeson.Types
+import           Data.Maybe
+import           GHC.Generics
+import qualified Orchestrate      as DB
+import           System.Exit      (exitFailure)
+import           System.Random
 
 data TestRecord = TestRecord
     { string :: String
-    , number  :: Int
+    , number :: Int
     } deriving (Show,Read,Generic,Eq)
 
 instance FromJSON TestRecord
