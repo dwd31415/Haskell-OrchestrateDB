@@ -166,6 +166,7 @@ orchestrateCollectionPut :: ToJSON obj => OrchestrateApplication -> OrchestrateC
 --   It does so by making a PUT request to the \/$collection\/$key endpoint(Offical API docs:<https://orchestrate.io/docs/apiref#keyvalue-put>).
 --   In order to upload a Haskell Value to the database, it must have an instance of 'ToJSON' because this
 --   client uses 'Data.Aeson' to convert those Haskel Values to JSON, which is required by Orchestrate.io.
+--
 --   = Example:
 --   @
 --      data TestRecord = TestRecord
@@ -208,6 +209,7 @@ orchestrateCollectionGet :: FromJSON res => OrchestrateApplication -> Orchestrat
 -- ^ The 'orchestrateCollectionGet' function request a value from an Orchestrate.io database, and tries to convert it to the specified Haskell type,
 --  if either gettings the value from the database or converting it to the Haskell type fails 'Nothing' is returned.
 --  The value is requested by making a GET request to the \/$collection\/$key endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#keyvalue-get>)
+--
 --   = Example:
 --   @
 --      data TestRecord = TestRecord
@@ -221,7 +223,7 @@ orchestrateCollectionGet :: FromJSON res => OrchestrateApplication -> Orchestrat
 --      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
 --      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
 --      let testRecord = TestRecord {string = "You may delay, but time will not!",number = 903}
---      dbValue <- <- DB.orchestrateCollectionGet dbApplication dbCollection "KEY" :: IO (Maybe TestRecord)
+--      dbValue <- DB.orchestrateCollectionGet dbApplication dbCollection "KEY" :: IO (Maybe TestRecord)
 --   @
 orchestrateCollectionGet application collection key = do
   let api_key = apiKey application
@@ -247,6 +249,23 @@ orchestrateCollectionGet application collection key = do
                   Left (_::X.SomeException) -> return  Nothing
 
 orchestrateCollectionDeleteKey :: OrchestrateApplication -> OrchestrateCollection -> String -> IO Bool
+-- ^ The 'orchestrateCollectionDeleteKey' function deletes a value from an Orchestrate.io database.
+--  The value is requested by making a DELETE request to the \/$collection\/$key endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#keyvalue-delete>)
+--
+--   = Example:
+--   @
+--      data TestRecord = TestRecord
+--        { string :: String
+--         , number :: Int
+--        } deriving (Show,Read,Generic,Eq)
+--
+--      instance FromJSON TestRecord
+--      instance ToJSON TestRecord
+--
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      _ <- DB.orchestrateCollectionKey dbApplication dbCollection "KEY"
+--   @
 orchestrateCollectionDeleteKey application collection key = do
   let api_key = apiKey application
   if api_key == ""
@@ -268,6 +287,15 @@ orchestrateCollectionDeleteKey application collection key = do
                     Left (_::X.SomeException) -> return False
 
 orchestrateCollectionDelete :: OrchestrateApplication -> OrchestrateCollection -> IO Bool
+-- ^ The 'orchestrateCollectionDelete' function deletes a collection from an Orchestrate.io application.
+--  The value is requested by making a DELETE request to the \/$collection endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#collections-delete>)
+--
+--   = Example:
+--   @
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      _ <- DB.orchestrateCollectionDelete dbApplication dbCollection
+--   @
 orchestrateCollectionDelete application collection = do
   let api_key = apiKey application
   if api_key == ""
@@ -291,10 +319,30 @@ orchestrateCollectionDelete application collection = do
 -- SEARCH
 
 orchestrateCollectionSearch :: OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe([Object],Bool))
+-- Please see 'orchestrateCollectionSearchWithOffset' for more information. This function just calls it without an offset and with a limit of 10.
 orchestrateCollectionSearch application collection query = orchestrateCollectionSearchWithOffset application collection query 0 10
 
 
 orchestrateCollectionSearchWithOffset :: OrchestrateApplication -> OrchestrateCollection -> String -> Integer -> Integer -> IO (Maybe([Object],Bool))
+-- ^ The 'orchestrateCollectionSearchWithOffset' function searches for the query in the database and returns an array
+--   of type Maybe ['Object']. Nothing is returned when connecting or authentication fails. The function uses the
+--   SEARCH method of the Orchestrate.io API (Offical documentation:<https://orchestrate.io/docs/apiref#search-collection>)
+--   , but automatically parsers the response. It returns a tupel of the type (Maybe(['Object'],Bool)), the boolean indicates wether or not
+--   more results are availble on the server. If that is true, the function should be called again with a higher offset, until (Just _,False) is returned.
+--
+--   = Example:
+--   @
+--      dbSearchResults query num =
+--          let results = DB.orchestrateCollectionSearchWithOffset query num (num+10)
+--          let currentResults = fromJust $ fst results
+--          if snd results
+--             then currentResults:(dbSearchResults query (num+10))
+--             else currentResults
+--
+--      let dbApplication = DB.createStdApplication \"APPLICATION_NAME\" \"API_KEY\"
+--      let dbCollection = DB.createStdCollection \"COLLECTION_NAME\"
+--      let completeDBSearchResults = dbSearchResults "QUERY" 0
+--   @
 orchestrateCollectionSearchWithOffset application collection query offset limit = do
   let api_key = apiKey application
   if api_key == ""

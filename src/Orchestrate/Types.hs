@@ -32,9 +32,13 @@ data OrchestrateCollection = OrchestrateCollection {
     collectionName :: String
 }
 
+-- |TypeClass for OrchestrateQueryResult and OrchestrateListResult, it makes it possible to have one function('resultValuesAsList'), that extractes
+-- the values from both of those types.
 class OrchestrateIntermediateResult a where
   resultValuesAsList :: [a] -> [Object]
 
+-- |Represents a path, as it is returned by the LIST and SEARCH function.
+-- Right now it is not actually used, but it might be useful in the future.
 data OrchestratePath = OrchestratePath {
   orchestratePathCollection :: String,
   orchestratePathKind       :: String,
@@ -54,6 +58,7 @@ instance FromJSON OrchestratePath where
     parseJSON _          = mzero
 instance ToJSON   OrchestratePath
 
+-- | Haskell type for the JSON scheme, that is returned by the SEARCH function.
 data OrchestrateQueryResult = OrchestrateQueryResult {
   orchestrateQueryResultPath               :: OrchestratePath,
   orchestrateQueryResultValue              :: Object,
@@ -74,6 +79,7 @@ instance OrchestrateIntermediateResult OrchestrateQueryResult where
   resultValuesAsList = map orchestrateQueryResultValue
 
 
+-- | Haskell type for the JSON scheme, that is returned by the LIST function.
 data OrchestrateListResult = OrchestrateListResult {
   orchestrateListResultPath               :: OrchestratePath,
   orchestrateListResultValue              :: Object,
