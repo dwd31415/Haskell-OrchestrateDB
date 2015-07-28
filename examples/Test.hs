@@ -33,8 +33,8 @@ main = do
   let config = read configTxt :: (String,String)
   let dbApplication = DB.createStdApplication "TestApp" (fst config)
   let dbCollection = DB.createStdCollection (snd config)
-  let testRecord1 = TestRecord {string = "You may delay, but time will not!",number = 903}
-  let testRecord2 = TestRecord {string = "Two things are infinite: the universe and human stupidity; and I am not sure about the universe.",number = 913}
+  let testRecord1 = TestRecord {string = "You may delay, but time will not.(Benjamin Franklin)",number = 903}
+  let testRecord2 = TestRecord {string = "Two things are infinite: the universe and human stupidity; and I am not sure about the universe.(Albert Einstein)",number = 913}
   res1 <- DB.validateApplication dbApplication
   unless res1 exitFailure
   reachTest 1

@@ -319,7 +319,7 @@ orchestrateCollectionDelete application collection = do
 -- SEARCH
 
 orchestrateCollectionSearch :: OrchestrateApplication -> OrchestrateCollection -> String -> IO (Maybe([Object],Bool))
--- Please see 'orchestrateCollectionSearchWithOffset' for more information. This function just calls it without an offset and with a limit of 10.
+-- ^ Please see 'orchestrateCollectionSearchWithOffset' for more information. This function just calls it without an offset and with a limit of 10.
 orchestrateCollectionSearch application collection query = orchestrateCollectionSearchWithOffset application collection query 0 10
 
 
