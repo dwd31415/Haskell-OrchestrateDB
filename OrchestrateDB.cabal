@@ -16,7 +16,10 @@ version:             1.0.0.0
 synopsis:             Unofficial Haskell Client Library for the Orchestrate.io API
 
 -- A longer description of the package.
--- description:
+description:          An implementation of most of the functions of the Orchestrate.io REST API in Haskell.
+                      To get started, see the documentation for the Orchestrate and  Orchestrate.REST module below.
+                      Because this module does use 'Data.Aeson' for parsing and encoding JSON you might want to take a look at it's docs too.
+                      For some working examples check out the "examples/Test.hs" file and the documentation.
 
 -- The license under which the package is released.
 license:             BSD3
@@ -32,15 +35,16 @@ author:              Adrian Dawid
 maintainer:          adriandwd@gmail.com
 
 -- A copyright notice.
--- copyright:
+copyright:           Copyright (c) 2015, Adrian Dawid
 
 category:            Database
-
+homepage:            https://github.com/dwd31415/Haskell-OrchestrateDB
+bug-reports:         https://github.com/dwd31415/Haskell-OrchestrateDB/issues
 build-type:          Simple
 
 -- Extra files to be distributed with the package, such as examples or a
 -- README.
--- extra-source-files:
+extra-source-files:  README.md
 
 -- Constraint on the version of Cabal needed to build this package.
 cabal-version:       >=1.10
@@ -51,7 +55,7 @@ library
   exposed-modules: Orchestrate
 
   -- Modules included in this library but not exported.
-  -- other-modules: Orchestrate
+  other-modules: Orchestrate.REST, Orchestrate.Types
 
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
