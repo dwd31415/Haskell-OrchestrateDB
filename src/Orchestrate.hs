@@ -105,9 +105,9 @@ If this application does say \"Invictus maneo!\", you should get this result if 
 @
 
 If you don't get that result, you either have run the example more than once, it did not return "Invictus maneo", or something really strange is going on.
-If you are fairly certain, that something strange is going on, and that it is my fault, you might want to open an issue at github.
+If you are fairly certain, that something strange is going on, and it is most likely my fault and you might want to open an issue at github.
 
-# How to use the "cabal test" command
+=How to use the "cabal test" command
 Testing applications which depend on some REST api is not easy, and therfore the cabal tests will fail by default. They just will not be able to authenticate, if you
 want to run the tests on your local machine, please create a file called "examples/config.txt" and fill it according to this scheme:
 
@@ -115,8 +115,8 @@ want to run the tests on your local machine, please create a file called "exampl
 ("a valid api key","something funny(it will be used as a name for the test collection)")
 @
 
-If you are asking yourself now, if there really is no way of checking that this library works, before installing it, there is nothing to work about.
-You should consult travis-ci<https://travis-ci.org/dwd31415/Haskell-OrchestrateDB> on the state of the project, it does not only check wether or not ther library can be built, but also runs the tests.
+If you are asking yourself now, if there really is no way of checking that this library works, before installing it, there is nothing to worry about.
+You should consult the travis-ci server(<https://travis-ci.org/dwd31415/Haskell-OrchestrateDB>) on the state of the project, it does not only check wether or not ther library can be built, but also runs the tests with an valid api key.
 -}
 module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
                    Orchestrate.Types.OrchestrateApplication(..),

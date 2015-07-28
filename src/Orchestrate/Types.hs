@@ -27,7 +27,7 @@ import           Data.Aeson
 import           GHC.Generics
 
 {-|
-A data type, that represents an Orchestrate application. It stores an api key (generated online), and a https-endpoint..
+A data type, that represents an Orchestrate application. It stores an api key (generated online) and a https-endpoint.
 -}
 data OrchestrateApplication = OrchestrateApplication {
     applicationName :: String,

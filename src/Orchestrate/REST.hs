@@ -9,7 +9,7 @@ License     : BSD3
 Maintainer  : adriandwd@gmail.com
 Stability   : stable
 
-This module conatins all the functins which interact with the Orchestrate.io REST API.
+This module conatins all the functions which interact with the Orchestrate.io REST API.
 Right now these actions are supported:
 
   *  	Validate API Keys
@@ -57,7 +57,7 @@ import           Orchestrate.Types
 validateApplication :: OrchestrateApplication -> IO Bool
 -- ^The 'validateApplication' function validates your API key,
 -- by making an authenticated HEAD request to the endpoint specified in the 'OrchestrateApplication' record.
--- The function returns False when the key is invalid or the connection could not be established.
+-- The function returns False when the key is invalid or no connection with the endpoint could be established.
 validateApplication application = do
   let api_key = apiKey application
   if api_key == ""
@@ -120,7 +120,7 @@ orchestrateCollectionList application collection limit = do
 orchestrateCollectionPutWithoutKey :: ToJSON obj => OrchestrateApplication -> OrchestrateCollection -> obj -> IO Bool
 -- ^ The 'orchestrateCollectionPutWithoutKey' function stores a Haskell value(with a 'ToJSON' instance) in an Orchestrate.io database.
 --   It does so by making a POST request to the \/$collection endpoint(Offical API docs:<https://orchestrate.io/docs/apiref#keyvalue-post>).
---   This function does not need a user specified key, because it ueses a server-generated key, if you want to know the key
+--   This function does not need a user specified key, because it uses a server-generated key, if you want to know the key
 --   use 'orchestrateCollectionPut' instead of this function.
 --
 --   = Example:
@@ -165,7 +165,7 @@ orchestrateCollectionPut :: ToJSON obj => OrchestrateApplication -> OrchestrateC
 -- ^ The 'orchestrateCollectionPut' function stores a Haskell value(with a 'ToJSON' instance) in an Orchestrate.io database.
 --   It does so by making a PUT request to the \/$collection\/$key endpoint(Offical API docs:<https://orchestrate.io/docs/apiref#keyvalue-put>).
 --   In order to upload a Haskell Value to the database, it must have an instance of 'ToJSON' because this
---   client uses 'Data.Aeson' to convert those Haskel Values to JSON, which is required by Orchestrate.io.
+--   client library uses 'Data.Aeson' to convert  Haskel Values to JSON, which is required by Orchestrate.io.
 --
 --   = Example:
 --   @
@@ -250,7 +250,7 @@ orchestrateCollectionGet application collection key = do
 
 orchestrateCollectionDeleteKey :: OrchestrateApplication -> OrchestrateCollection -> String -> IO Bool
 -- ^ The 'orchestrateCollectionDeleteKey' function deletes a value from an Orchestrate.io database.
---  The value is requested by making a DELETE request to the \/$collection\/$key endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#keyvalue-delete>)
+--  This is done by making a DELETE request to the \/$collection\/$key endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#keyvalue-delete>)
 --
 --   = Example:
 --   @
@@ -288,7 +288,7 @@ orchestrateCollectionDeleteKey application collection key = do
 
 orchestrateCollectionDelete :: OrchestrateApplication -> OrchestrateCollection -> IO Bool
 -- ^ The 'orchestrateCollectionDelete' function deletes a collection from an Orchestrate.io application.
---  The value is requested by making a DELETE request to the \/$collection endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#collections-delete>)
+--  This is done by making a DELETE request to the \/$collection endpoint(Offical documentation:<https://orchestrate.io/docs/apiref#collections-delete>)
 --
 --   = Example:
 --   @
@@ -325,10 +325,10 @@ orchestrateCollectionSearch application collection query = orchestrateCollection
 
 orchestrateCollectionSearchWithOffset :: OrchestrateApplication -> OrchestrateCollection -> String -> Integer -> Integer -> IO (Maybe([Object],Bool))
 -- ^ The 'orchestrateCollectionSearchWithOffset' function searches for the query in the database and returns an array
---   of type Maybe ['Object']. Nothing is returned when connecting or authentication fails. The function uses the
+--   of the type \"'Maybe' ['Object']\". Nothing is returned when establishing a connection or authenticating failed. The function uses the
 --   SEARCH method of the Orchestrate.io API (Offical documentation:<https://orchestrate.io/docs/apiref#search-collection>)
---   , but automatically parsers the response. It returns a tupel of the type (Maybe(['Object'],Bool)), the boolean indicates wether or not
---   more results are availble on the server. If that is true, the function should be called again with a higher offset, until (Just _,False) is returned.
+--   , but automatically parsers the response. It returns a tupel of the type ('Maybe'(['Object'],'Bool')), the boolean indicates wether or not
+--   more results are availble on the server. If that is true, the function should be called again with an increased offset, until (Just _,False) is returned.
 --
 --   = Example:
 --   @
