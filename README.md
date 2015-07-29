@@ -1,4 +1,4 @@
-# Haskell-OrchestrateDB [![Build Status](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB.svg?branch=master)](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB)  [![Hackage](https://img.shields.io/hackage/v/lens.svg)](http://hackage.haskell.org/package/OrchestrateDB)
+# Haskell-OrchestrateDB [![Build Status](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB.svg?branch=master)](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB)  [![Hackage](https://img.shields.io/badge/hackage-v1.0.0.0-brightgreen.svg)](http://hackage.haskell.org/package/OrchestrateDB)
 Unofficial Haskell Client Library for the Orchestrate.io API
 
 # How to install this package?
