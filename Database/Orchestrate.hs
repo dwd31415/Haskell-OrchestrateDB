@@ -1,5 +1,5 @@
 {-|
-Module      : Orchestrate
+Module      : Database.Orchestrate
 Copyright   : (c) Adrian Dawid 2015
 License     : BSD3
 Maintainer  : adriandwd@gmail.com
@@ -45,7 +45,7 @@ module Main where
 
 import GHC.Generics
 import Data.Aeson
-import qualified Orchestrate as DB
+import qualified Database.Orchestrate as DB
 
 data SherlockHolmesCase = SherlockHolmesCase {
   title :: String,
@@ -118,34 +118,34 @@ want to run the tests on your local machine, please create a file called "exampl
 If you are asking yourself now, if there really is no way of checking that this library works, before installing it, there is nothing to worry about.
 You should consult the travis-ci server(<https://travis-ci.org/dwd31415/Haskell-OrchestrateDB>) on the state of the project, it does not only check wether or not ther library can be built, but also runs the tests with an valid api key.
 -}
-module Orchestrate(Orchestrate.Types.OrchestrateCollection(..),
-                   Orchestrate.Types.OrchestrateApplication(..),
-                   Orchestrate.REST.validateApplication,
-                   Orchestrate.REST.orchestrateCollectionGet,
-                   Orchestrate.REST.orchestrateCollectionPut,
-                   Orchestrate.REST.orchestrateCollectionPutWithoutKey,
-                   Orchestrate.REST.orchestrateCollectionDelete,
-                   Orchestrate.REST.orchestrateCollectionDeleteKey,
-                   Orchestrate.REST.orchestrateCollectionSearch,
-                   Orchestrate.REST.orchestrateCollectionSearchWithOffset,
-                   Orchestrate.REST.orchestrateCollectionList,
+module Database.Orchestrate(Database.Orchestrate.Types.OrchestrateCollection(..),
+                   Database.Orchestrate.Types.OrchestrateApplication(..),
+                   Database.Orchestrate.REST.validateApplication,
+                   Database.Orchestrate.REST.orchestrateCollectionGet,
+                   Database.Orchestrate.REST.orchestrateCollectionPut,
+                   Database.Orchestrate.REST.orchestrateCollectionPutWithoutKey,
+                   Database.Orchestrate.REST.orchestrateCollectionDelete,
+                   Database.Orchestrate.REST.orchestrateCollectionDeleteKey,
+                   Database.Orchestrate.REST.orchestrateCollectionSearch,
+                   Database.Orchestrate.REST.orchestrateCollectionSearchWithOffset,
+                   Database.Orchestrate.REST.orchestrateCollectionList,
                    createStdCollection,
                    createStdApplication) where
 
-import qualified Orchestrate.REST
-import qualified Orchestrate.Types
+import qualified Database.Orchestrate.REST
+import qualified Database.Orchestrate.Types
 
-createStdApplication :: String -> String -> Orchestrate.Types.OrchestrateApplication
+createStdApplication :: String -> String -> Database.Orchestrate.Types.OrchestrateApplication
 -- ^Creates an application record with the std.(\"https://api.orchestrate.io/v0\") enpoint.
 createStdApplication name api_key =
-  Orchestrate.Types.OrchestrateApplication {
-    Orchestrate.Types.applicationName = name,
-    Orchestrate.Types.apiKey = api_key,
-    Orchestrate.Types.httpsEndpoint = "https://api.orchestrate.io/v0"
+  Database.Orchestrate.Types.OrchestrateApplication {
+    Database.Orchestrate.Types.applicationName = name,
+    Database.Orchestrate.Types.apiKey = api_key,
+    Database.Orchestrate.Types.httpsEndpoint = "https://api.orchestrate.io/v0"
   }
 
-createStdCollection :: String -> Orchestrate.Types.OrchestrateCollection
+createStdCollection :: String -> Database.Orchestrate.Types.OrchestrateCollection
 -- ^Creates an collection record.
-createStdCollection name = Orchestrate.Types.OrchestrateCollection {
-  Orchestrate.Types.collectionName = name
+createStdCollection name = Database.Orchestrate.Types.OrchestrateCollection {
+  Database.Orchestrate.Types.collectionName = name
 }

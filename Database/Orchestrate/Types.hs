@@ -13,7 +13,7 @@ Stability   : stable
 
 This module conatins Haskell types which represent all necessary JSON patterns used by the Orchestrate.io API.
 -}
-module Orchestrate.Types
+module Database.Orchestrate.Types
     ( OrchestrateApplication(..),
       OrchestrateCollection(..),
       OrchestrateQueryResult(..),

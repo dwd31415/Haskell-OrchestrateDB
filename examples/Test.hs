@@ -10,7 +10,7 @@ import           Data.Aeson
 import           Data.Aeson.Types
 import           Data.Maybe
 import           GHC.Generics
-import qualified Orchestrate      as DB
+import qualified Database.Orchestrate   as DB
 import           System.Exit      (exitFailure)
 import           System.Random
 

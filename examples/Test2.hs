@@ -3,7 +3,7 @@ module Main where
 
 import GHC.Generics
 import Data.Aeson
-import qualified Orchestrate as DB
+import qualified Database.Orchestrate as DB
 
 data SherlockHolmesCase = SherlockHolmesCase {
   title :: String,

@@ -29,7 +29,7 @@ Right now these actions are supported:
   *   Query Collection
 
 -}
-module Orchestrate.REST
+module Database.Orchestrate.REST
     (
       validateApplication,
       orchestrateCollectionPutWithoutKey,
@@ -52,7 +52,7 @@ import qualified Data.ByteString.Lazy      as BSLazy
 import           Data.Aeson
 import           Data.Aeson.Types
 import           Data.Maybe
-import           Orchestrate.Types
+import           Database.Orchestrate.Types
 
 validateApplication :: OrchestrateApplication -> IO Bool
 -- ^The 'validateApplication' function validates your API key,
