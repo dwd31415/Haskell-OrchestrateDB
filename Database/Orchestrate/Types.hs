@@ -33,14 +33,14 @@ data OrchestrateApplication = OrchestrateApplication {
     applicationName :: String,
     apiKey          :: String,
     httpsEndpoint   :: String
-}
+} deriving (Show,Read,Eq)
 
 {-|
 Represents a collection inside an OrchestrateApplication, it stores all data necessary to access it.
 -}
 data OrchestrateCollection = OrchestrateCollection {
     collectionName :: String
-}
+} deriving (Show,Read,Eq)
 
 -- |TypeClass for OrchestrateQueryResult and OrchestrateListResult, it makes it possible to have one function('resultValuesAsList'), that extractes
 -- the values from both of those types.

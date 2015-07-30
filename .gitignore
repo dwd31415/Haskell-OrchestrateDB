@@ -18,3 +18,7 @@ cabal.sandbox.config
 /.dist-buildwrapper/
 
 examples/config.txt
+
+dist/setup-config
+
+dist/build/autogen/cabal_macros.h
