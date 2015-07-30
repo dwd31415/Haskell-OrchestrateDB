@@ -22,3 +22,7 @@ examples/config.txt
 dist/setup-config
 
 dist/build/autogen/cabal_macros.h
+
+dist/build/autogen/Paths_OrchestrateDB.hs
+
+dist/build/autogen/Paths_OrchestrateDB.hs
