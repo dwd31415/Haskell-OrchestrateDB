@@ -14,14 +14,14 @@ catchIO = Exception.catch
 
 
 version :: Version
-version = Version {versionBranch = [1,0,0,1], versionTags = []}
+version = Version {versionBranch = [1,0,0,2], versionTags = []}
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/Users/adriandawid/Library/Haskell/bin"
-libdir     = "/Users/adriandawid/Library/Haskell/ghc-7.8.3-x86_64/lib/OrchestrateDB-1.0.0.1"
-datadir    = "/Users/adriandawid/Library/Haskell/share/ghc-7.8.3-x86_64/OrchestrateDB-1.0.0.1"
-libexecdir = "/Users/adriandawid/Library/Haskell/libexec"
-sysconfdir = "/Users/adriandawid/Library/Haskell/etc"
+bindir     = "/home/adrian/.cabal/bin"
+libdir     = "/home/adrian/.cabal/lib/x86_64-linux-ghc-7.6.3/OrchestrateDB-1.0.0.2"
+datadir    = "/home/adrian/.cabal/share/x86_64-linux-ghc-7.6.3/OrchestrateDB-1.0.0.2"
+libexecdir = "/home/adrian/.cabal/libexec"
+sysconfdir = "/home/adrian/.cabal/etc"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "OrchestrateDB_bindir") (\_ -> return bindir)

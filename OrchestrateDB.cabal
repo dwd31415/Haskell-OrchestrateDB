@@ -10,7 +10,7 @@ name:                OrchestrateDB
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:             1.0.0.2
+version:             1.0.0.3
 
 -- A short (one-line) description of the package.
 synopsis:             Unofficial Haskell Client Library for the Orchestrate.io API
@@ -61,7 +61,7 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.7 && <4.9, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
+  build-depends:       base >=4.6 && <4.9, HTTP >= 4000, http-conduit >= 2.1, http-types >= 0.8, bytestring >= 0.10
                       ,lifted-base >= 0.2, aeson
 
   -- Directories containing source files.
