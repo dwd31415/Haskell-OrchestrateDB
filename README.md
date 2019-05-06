@@ -1,6 +1,6 @@
 # Haskell-OrchestrateDB  
 
-[![Build Status](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB.svg?branch=master)](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB)  [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)  [![GitHub license](https://img.shields.io/github/license/dwd31415/Haskell-OrchestrateDB.svg)]() [![Hackage-Deps](https://img.shields.io/hackage-deps/v/OrchestrateDB.svg)](http://hackage.haskell.org/package/OrchestrateDB)
+[![Build Status](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB.svg?branch=master)](https://travis-ci.org/dwd31415/Haskell-OrchestrateDB) [![Hackage](https://img.shields.io/hackage/v/OrchestrateDB.svg)](http://hackage.haskell.org/package/OrchestrateDB)  [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)  [![Hackage-Deps](https://img.shields.io/hackage-deps/v/OrchestrateDB.svg)](http://hackage.haskell.org/package/OrchestrateDB)
 
 # How to install this package?
 
